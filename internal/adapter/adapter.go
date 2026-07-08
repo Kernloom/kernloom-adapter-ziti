@@ -5,16 +5,22 @@ package adapter
 
 import (
 	"context"
+	"strings"
 
 	adapterv1 "github.com/kernloom/kernloom-protocol/sdk/go/adapter/v1"
 )
 
 type Adapter struct {
 	adapterv1.UnimplementedAdapterServiceServer
+	manifestDigest string
 }
 
 func New() *Adapter {
-	return &Adapter{}
+	return NewWithManifestDigest("")
+}
+
+func NewWithManifestDigest(manifestDigest string) *Adapter {
+	return &Adapter{manifestDigest: strings.TrimSpace(manifestDigest)}
 }
 
 func (a *Adapter) Descriptor(context.Context) (*adapterv1.AdapterDescriptor, error) {
@@ -22,6 +28,7 @@ func (a *Adapter) Descriptor(context.Context) (*adapterv1.AdapterDescriptor, err
 		AdapterId:       "kernloom.adapter.ziti",
 		Name:            "Kernloom OpenZiti Adapter",
 		ProtocolVersion: adapterv1.ProtocolVersion,
+		ManifestDigest:  a.manifestDigest,
 		Capabilities: []*adapterv1.CapabilityDescriptor{
 			{
 				Id:          "ziti.observed_state.read",
