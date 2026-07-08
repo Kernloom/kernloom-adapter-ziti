@@ -42,6 +42,7 @@ func describe() {
 func serve(args []string) {
 	fs := flag.NewFlagSet("kernloom-adapter-ziti serve", flag.ExitOnError)
 	addr := fs.String("addr", "127.0.0.1:18081", "gRPC listen address")
+	manifestDigest := fs.String("manifest-digest", os.Getenv("KERNLOOM_ADAPTER_MANIFEST_DIGEST"), "sha256 digest of the adapter manifest reported by Describe")
 	if err := fs.Parse(args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
@@ -53,7 +54,7 @@ func serve(args []string) {
 		os.Exit(1)
 	}
 	server := grpc.NewServer()
-	adapterv1.RegisterAdapterServiceServer(server, adapter.New())
+	adapterv1.RegisterAdapterServiceServer(server, adapter.NewWithManifestDigest(*manifestDigest))
 	logger.Info("adapter_server_starting", "adapter_id", "kernloom.adapter.ziti", "addr", *addr)
 	if err := server.Serve(listener); err != nil {
 		logger.Error("adapter_server_failed", "adapter_id", "kernloom.adapter.ziti", "addr", *addr, "error", err.Error())
