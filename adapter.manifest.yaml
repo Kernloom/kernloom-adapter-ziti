@@ -1,0 +1,28 @@
+adapter_id: kernloom.adapter.ziti
+adapter_version: 0.1.0
+protocol_version: adapter/v1
+status: planned
+component_role: component_role.adapter
+capabilities:
+  - capability_id: read.state.overlay_service_policy
+    implementation_status: planned
+    implemented_granularities:
+      - granularity.relationship
+  - capability_id: plan.config.overlay_service_policy
+    implementation_status: planned
+    implemented_granularities:
+      - granularity.relationship
+  - capability_id: validate.config.overlay_service_policy
+    implementation_status: planned
+    implemented_granularities:
+      - granularity.relationship
+  - capability_id: provide.relationship.observed_relationship
+    implementation_status: planned
+    implemented_granularities:
+      - granularity.relationship
+  - capability_id: provide.evidence.config_conformance
+    implementation_status: planned
+    implemented_granularities:
+      - granularity.relationship
+privileges:
+  - privilege_id: privilege.adapter.runtime_readback
